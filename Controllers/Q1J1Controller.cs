@@ -9,23 +9,27 @@ namespace a2_http5125.Controllers
   public class Q1J1Controller : ControllerBase
   {
     /// <summary>
-    /// Returns the cube of the given integer
+    /// Calculate final score after packages are delivered with/without collisions
     /// </summary>
-    /// <param name="base">The base integer to calculate the cube</param>
-    /// <returns>The cube of the base integer</returns>
+    /// <param name="delivered">Number of packages delivered</param>
+    /// <param name="collisions">Number of collisions</param>
+    /// <returns>Final score</returns>
     /// <example>
-    /// GET: localhost:5169/api/Cube/cube/4 -> 64
-    /// GET: localhost:5169/api/Cube/cube/-4 -> -64
-    /// GET: localhost:5169/api/Cube/cube/100 -> 1000
+    /// POST: localhost:5026/api/Q1J1/delivedroid (Content-Type: application/x-www-form-urlencoded)
+    /// Body: delivered=5&collisions=2
+    /// Output: 730
     /// </example>
-
-    [HttpGet(template:"cube/{base}")]
-    public double Cube(int @base)
+    [HttpPost(template: "delivedroid")]
+    [Consumes("application/x-www-form-urlencoded")]
+    public int Delivedroid([FromForm] int delivered, [FromForm] int collisions)
     {
-        return Math.Pow(@base, 3);
+      int finalScore = (delivered * 50) - (collisions * 10);
+      if (delivered > collisions)
+      {
+        finalScore += 500;
+      }
+      return finalScore;
     }
-
   }
-
 }
 

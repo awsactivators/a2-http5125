@@ -433,11 +433,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/Genevieve/Desktop/Web-Dev-Humber/labs/Backend/a2-http5125/a2-http5125.csproj",
+      "projectUniqueName": "/Users/Genevieve/Desktop/Web-Dev-Humber/labs/Backend/a2_http5125/a2-http5125.csproj",
       "projectName": "a2-http5125",
-      "projectPath": "/Users/Genevieve/Desktop/Web-Dev-Humber/labs/Backend/a2-http5125/a2-http5125.csproj",
+      "projectPath": "/Users/Genevieve/Desktop/Web-Dev-Humber/labs/Backend/a2_http5125/a2-http5125.csproj",
       "packagesPath": "/Users/Genevieve/.nuget/packages/",
-      "outputPath": "/Users/Genevieve/Desktop/Web-Dev-Humber/labs/Backend/a2-http5125/obj/",
+      "outputPath": "/Users/Genevieve/Desktop/Web-Dev-Humber/labs/Backend/a2_http5125/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/Genevieve/.nuget/NuGet/NuGet.Config"
