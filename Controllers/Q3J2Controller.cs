@@ -23,38 +23,28 @@ namespace a2_http5125.Controllers
 
     public IActionResult CalculateSpiciness([FromForm] int numPeppers, [FromForm] List<string> peppers)
     {
+      Dictionary<string, int> pepper = new Dictionary<string, int>
+      {
+        {"Poblano", 1500},
+        {"Mirasol", 6000},
+        {"Serrano", 15500},
+        {"Cayenne", 40000},
+        {"Thai", 75000},
+        {"Habanero", 125000}
+      };
+
       int totalSpiciness = 0;
-      
-        foreach (var pepper in peppers)
+
+      for (int i = 0; i < numPeppers; i++)
+      {
+        if (pepper.ContainsKey(peppers[i]))
         {
-          if (pepper == "Poblano")
-          {
-            totalSpiciness += 1500;
-          }
-          else if (pepper == "Mirasol")
-          {
-            totalSpiciness += 6000;
-          }
-          else if (pepper == "Serrano")
-          {
-            totalSpiciness += 15500;
-          }
-          else if (pepper == "Cayenne")
-          {
-            totalSpiciness += 40000;
-          }
-          else if (pepper == "Thai")
-          {
-            totalSpiciness += 75000;
-          }
-          else if (pepper == "Habanero")
-          {
-            totalSpiciness += 125000;
-          }
-          else
-          {
-            return BadRequest($"Unknown pepper: {pepper}");
-          }
+          totalSpiciness += pepper[peppers[i]];
+        } 
+        else
+        {
+          return BadRequest($"Unknown pepper: {peppers[i]}");
+        }
       }
 
       return Ok(totalSpiciness);

@@ -1,4 +1,4 @@
-// Question from https://cemc.uwaterloo.ca/sites/default/files/documents/2023/2023CCCJrProblemSet.html
+// https://cemc.uwaterloo.ca/sites/default/files/documents/2021/2021CCCJrProblemSet.html
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -10,45 +10,60 @@ namespace a2_http5125.Controllers
   public class Q5J3Controller : ControllerBase
   {
     /// <summary>
-    /// Determine the best day to schedule an event
+    /// Decodes instructions for finding the secret formula based on given input.
     /// </summary>
-    /// <param name="numPeople">Number of people interested in attending</param>
-    /// <param name="availability">List of people's availability (Y or . for each of the 5 days)</param>
-    /// <returns>Best day for the event</returns>
+    /// <param name="instructions">A list of 5 digit coded instructions</param>
+    /// <returns>List of decoded instructions indicating direction and steps</returns>
     /// <example>
-    /// POST: localhost:5169/api/Q5J1/scheduleevent/ (Content-Type: application/x-www-form-urlencoded)
-    /// Body: numPeople=3&availability=YY.Y.&availability=...Y.&availability=.YYY.
-    /// Output: 4
+    /// POST: localhost:5169/api/Q5J3/decodeinstructions (Content-Type: application/x-www-form-urlencoded)
+    /// Body: instructions=57234&instructions=00907&instructions=34100&instructions=99999
+    /// Output: right 234, right 907, left 100
     /// </example>
-    [HttpPost(template: "scheduleevent")]
+    [HttpPost(template: "decodeinstructions")]
     [Consumes("application/x-www-form-urlencoded")]
-    public IActionResult ScheduleEvent([FromForm] int numPeople, [FromForm] List<string> availability)
+    public IActionResult DecodeInstructions([FromForm] List<string> instructions)
     {
-      int[] dayAvailability = new int[5];
+      List<string> directions = new List<string>();
+      List<string> steps = new List<string>();
+      string previousDirection = "";
+      int counter = 0;
 
-      foreach (var personAvailability in availability)
+      foreach (var instruction in instructions)
       {
-        for (int i = 0; i < 5; i++)
+        if (instruction == "99999")
         {
-          if (personAvailability[i] == 'Y')
-          {
-            dayAvailability[i]++; 
-          }
+          break;
         }
+
+        steps.Add(instruction.Substring(2));
+        string check = instruction.Substring(0, 2);
+        int sum = int.Parse(check[0].ToString()) + int.Parse(check[1].ToString());
+
+        if (sum == 0)
+        {
+          directions.Add(previousDirection);
+        }
+        else if (sum % 2 == 0)
+        {
+          directions.Add("right");
+          previousDirection = "right";
+        }
+        else
+        {
+          directions.Add("left");
+          previousDirection = "left";
+        }
+
+        counter++;
       }
 
-      int maxAvailability = dayAvailability.Max();
-
-      List<int> bestDays = new List<int>();
-      for (int i = 0; i < 5; i++)
+      List<string> result = new List<string>();
+      for (int i = 0; i < counter; i++)
       {
-        if (dayAvailability[i] == maxAvailability)
-        {
-          bestDays.Add(i + 1); 
-        }
+        result.Add($"{directions[i]} {steps[i]}");
       }
 
-      return Ok(string.Join(",", bestDays));
+      return Ok(string.Join(", ", result));
     }
   }
 }

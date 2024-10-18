@@ -20,37 +20,36 @@ namespace a2_http5125.Controllers
     /// Body:      numPlayers=3&pointsAndFouls=12&pointsAndFouls=4&pointsAndFouls=10&pointsAndFouls=3&pointsAndFouls=9&pointsAndFouls=1
     /// Output: 3+
     /// </example>
-    [HttpPost(template: "stars")]
+    [HttpPost(template: "calculatestars")]
     [Consumes("application/x-www-form-urlencoded")]
     public IActionResult CalculateStars([FromForm] int numPlayers, [FromForm] List<int> pointsAndFouls)
     {
+
       int positiveRatingCount = 0;
-      bool isGoldTeam = true;
+      int starPlayer = 0;
 
       for (int i = 0; i < numPlayers; i++)
       {
-        int points = pointsAndFouls[i * 2];  
-        int fouls = pointsAndFouls[i * 2 + 1]; 
-
-        int starRating = points - fouls;
-
-        if (starRating > 0)
+        int points = pointsAndFouls[i * 2];
+        int fouls = pointsAndFouls[i * 2 + 1];
+        int starRating = points * 5 - fouls * 3;
+        
+        if (starRating > 40)
         {
-          positiveRatingCount++;
+          starPlayer++;
         }
-        else
-        {
-          isGoldTeam = false; 
-        }
+
+        positiveRatingCount++;
       }
 
-      string result = positiveRatingCount.ToString();
-      if (isGoldTeam)
+      if (starPlayer == numPlayers)
       {
-        result += "+";
+        return Ok(starPlayer + "+");
       }
-
-      return Content(result);
+      else
+      {
+        return Ok(starPlayer.ToString());
+      }
     }
   }
 }
